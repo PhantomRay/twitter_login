@@ -173,7 +173,7 @@ class TwitterLogin {
     }
   }
 
-  Future<AuthResult> loginV2({bool forceLogin = false}) async {
+  Future<AuthResult> loginV2({bool forceLogin = false, void Function()? onLoad}) async {
     String? resultURI;
     RequestToken requestToken;
     try {
@@ -253,6 +253,7 @@ class TwitterLogin {
         throw const CanceledByUserException();
       }
 
+      onLoad?.call();
       final token = await AccessToken.getAccessToken(
         apiKey,
         apiSecretKey,
