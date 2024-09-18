@@ -34,7 +34,7 @@ class TwitterLogin {
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   ///使用更安全的登录交互方式
-  Future<AuthResult> loginV3({required String oauthToken, void Function()? onLoad}) async {
+  Future<AuthResult> login({required String oauthToken}) async {
     String? resultURI;
 
     final uri = Uri.parse(redirectURI);
@@ -100,8 +100,6 @@ class TwitterLogin {
       if (queries['denied'] != null) {
         throw const CanceledByUserException();
       }
-
-      onLoad?.call();
 
       return AuthResult(
         authToken: queries['oauth_token'],
