@@ -34,7 +34,7 @@ class TwitterLogin {
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   ///使用更安全的登录交互方式
-  Future<AuthResult> login({required String oauthToken}) async {
+  Future<AuthResult> login({required String oauthToken, required String oauthUrl}) async {
     String? resultURI;
 
     final uri = Uri.parse(redirectURI);
@@ -62,15 +62,13 @@ class TwitterLogin {
       },
     );
 
-    final authorizeURI = 'https://api.twitter.com/oauth/authorize?oauth_token==$oauthToken';
-
     try {
       if (Platform.isIOS || Platform.isMacOS) {
         /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
-        resultURI = await authBrowser.doAuth(authorizeURI, uri.scheme);
+        resultURI = await authBrowser.doAuth(oauthUrl, uri.scheme);
       } else if (Platform.isAndroid) {
         // Login to Twitter account with chrome_custom_tabs.
-        final success = await authBrowser.open(authorizeURI, uri.scheme);
+        final success = await authBrowser.open(oauthUrl, uri.scheme);
         if (!success) {
           throw PlatformException(
             code: '200',
